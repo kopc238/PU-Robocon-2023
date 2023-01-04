@@ -10,7 +10,7 @@ CytronMD BM2(PWM_DIR, 5, 4);
 CytronMD BM3(PWM_DIR, 7, 6); 
 CytronMD BM4(PWM_DIR, 9, 8); 
 
-int speed=64;
+int speed=100;
 
 //INPUT from Serial1 Monitor
 char x;
