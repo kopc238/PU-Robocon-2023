@@ -10,21 +10,16 @@ int encoder_perimeter=150.72;//150.72=(pi*48) in mm
 //these pins can not be changed 2/3 are special pins
 int encoderPinA_x = 2;
 int encoderPinB_x = 3;
-
-
-//these pins can not be changed 2/3 are special pins
+//these pins can not be changed 18/19 are special pins
 int encoderPinA_y = 18;
 int encoderPinB_y = 19;
 
-
 volatile int lastEncoded_x = 0;
 volatile long encoderValue_x = 0;
-
 long lastencoderValue_x = 0;
 
 volatile int lastEncoded_y = 0;
 volatile long encoderValue_y = 0;
-
 long lastencoderValue_y = 0;
 
 int lastMSB_x = 0;
@@ -33,14 +28,19 @@ int lastLSB_x = 0;
 int lastMSB_y = 0;
 int lastLSB_y = 0;
 
+//Current positions of the robot 
+float x=0.0,y=0.0;
+
 float angular_displacement_x;
 float x_rotations;
 float angular_displacement_y;
 float y_rotations;
 
 float x_displacement , y_displacement;
- 
+
+
 void setup() {
+  
   Serial.begin (9600);
 
   pinMode(encoderPinA_x, INPUT); 
@@ -61,9 +61,9 @@ void setup() {
   digitalWrite(encoderPinB_y, HIGH); //turn pullup resistor on
 
   //call updateEncoder() when any high/low changed seen
-  //on interrupt 0 (pin 2), or interrupt 1 (pin 3) 
-  attachInterrupt(0, updateEncoder_y, CHANGE); 
-  attachInterrupt(1, updateEncoder_y, CHANGE);
+  //on interrupt 2 (pin 18), or interrupt 3 (pin 19) 
+  attachInterrupt(2, updateEncoder_y, CHANGE); 
+  attachInterrupt(3, updateEncoder_y, CHANGE);
 
   
 
@@ -75,38 +75,38 @@ void loop(){
   //For Encoder one and x axis
   angular_displacement_x=map(encoderValue_x,0,2400,0,360);
   x_rotations=angular_displacement_x/360;
+  
   //For Encoder two and y axis
   angular_displacement_y=map(encoderValue_y,0,2400,0,360);
   y_rotations=angular_displacement_y/360;
 
-
+  //Distance travelled
   float x_displacement=x_rotations*encoder_perimeter;
   float y_displacement=y_rotations*encoder_perimeter;
+
+  //Current positions
+  x=x_displacement;
+  y=y_displacement;
   
-  Serial.print("angular_displacement_x: ");
-  Serial.print(angular_displacement_x);
-  Serial.print("   ");
-  Serial.print("encoderValue_x: ");
-  Serial.print(encoderValue_x);
-  Serial.print("    ");
   Serial.print("X Rotations: ");
-  Serial.println(x_rotations);
-
-
-/*
-  Serial.print("angular_displacement_y: ");
-  Serial.print(angular_displacement_y);
-  Serial.print("   ");
-  Serial.print("encoderValue_y: ");
-  Serial.print(encoderValue_y);
-  Serial.print("    ");
+  Serial.print(x_rotations);
+  Serial.print("  ");
+  Serial.print("X Displacement: ");
+  Serial.print(x_displacement);
+  Serial.print("  ");
+   
   Serial.print("Y Rotations: ");
   Serial.println(y_rotations);
-  */
+  Serial.print("  ");
+  Serial.print("Y Displacement: ");
+  Serial.println(y_displacement);
+  //Serial.print("  ");
 
   
   delay(1000); //just here to slow down the output, and show it will work  even during a delay
 }
+
+
 
 
 void updateEncoder_x(){
