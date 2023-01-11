@@ -1,5 +1,6 @@
 //Code for ER arduino mega
 //reciever end
+//Also this code has 
 
 #include "CytronMotorDriver.h"
 
@@ -10,7 +11,7 @@ CytronMD BM2(PWM_DIR, 5, 4);
 CytronMD BM3(PWM_DIR, 7, 6); 
 CytronMD BM4(PWM_DIR, 9, 8); 
 
-int speed=100;
+int motor_speed=127;
 
 //INPUT from Serial1 Monitor
 char x;
@@ -28,54 +29,93 @@ void halt()
     BM2.setSpeed(0);
     BM3.setSpeed(0);
     BM4.setSpeed(0);
-    Serial1.print("halt\n");
 }
 
-void forward()
-{
-    BM1.setSpeed(speed);
-    BM2.setSpeed(speed);
-    Serial1.print("Forward\n");       
+void forward(){
+  for (int i=0;i<127;i++){
+      BM1.setSpeed(i);
+      BM2.setSpeed(i);  
+    }
 }
 
-void backward()
-{
-    BM1.setSpeed(-speed);
-    BM2.setSpeed(-speed);
-    Serial1.print("Backward\n");       
+void backward(){
+    for (int i=0;i<127;i++){
+      BM1.setSpeed(-i);
+      BM2.setSpeed(-i);  
+    }
 }
 
-void right()
-{
-    BM3.setSpeed(speed);
-    BM4.setSpeed(-speed);
-    Serial1.print("Right\n"); 
+void right(){
+  for (int i=0;i<127;i++){
+      BM3.setSpeed(i);
+      BM4.setSpeed(-i);  
+    }
 }
 
-void left()
-{
-    BM3.setSpeed(-speed);
-    BM4.setSpeed(speed);
-    Serial1.print("Left\n");
+void left(){
+    for (int i=0;i<127;i++){
+      BM3.setSpeed(-i);
+      BM4.setSpeed(i);  
+    }
 }
 
-void LeftRotate()
-{
-  BM1.setSpeed(speed);
-  BM2.setSpeed(-speed);
-  BM3.setSpeed(speed);
-  BM4.setSpeed(speed);
-  Serial1.print("LeftRotate\n");
+void LeftRotate(){
+  for (int i=0;i<127;i++){
+      BM1.setSpeed(i);
+      BM2.setSpeed(-i);  
+      BM3.setSpeed(i);
+      BM4.setSpeed(i); 
+    }
 }
 
-void RightRotate()
-{
-  BM1.setSpeed(-speed);
-  BM2.setSpeed(speed);
-  BM3.setSpeed(-speed);
-  BM4.setSpeed(-speed);
-  Serial1.print("RightRotate \n");
+void RightRotate(){
+  for (int i=0;i<127;i++){
+      BM1.setSpeed(-i);
+      BM2.setSpeed(i);  
+      BM3.setSpeed(-i);
+      BM4.setSpeed(-i); 
+    }
 }
+  
+void Diagonal(char x){
+  if (x=='P'){
+    //forward and right
+    for (int i=0;i<127;i++){
+      BM1.setSpeed(i);
+      BM2.setSpeed(i);  
+      BM3.setSpeed(i);
+      BM4.setSpeed(-i); 
+    }
+  }
+   else if (x=='Q'){   
+    //forward and left
+    for (int i=0;i<127;i++){
+      BM1.setSpeed(i);
+      BM2.setSpeed(i);  
+      BM3.setSpeed(-i);
+      BM4.setSpeed(i); 
+    }
+  }
+   else if (x=='Z'){
+    //backward and left
+    for (int i=0;i<127;i++){
+      BM1.setSpeed(-i);
+      BM2.setSpeed(-i);  
+      BM3.setSpeed(-i);
+      BM4.setSpeed(i); 
+    }
+  }
+    else if (x=='M'){
+      //backward and right
+      for (int i=0;i<127;i++){
+      BM1.setSpeed(-i);
+      BM2.setSpeed(-i);  
+      BM3.setSpeed(i);
+      BM4.setSpeed(-i); 
+    }
+  }
+}
+
 
 
 
@@ -111,7 +151,10 @@ void loop()
         {
             RightRotate();//Revolves clockwise
         }
-    
+    else if(x=='P' || x=='Q' || x=='Z' || x=='M')
+        {
+          Diagonal(x);//Diagonal movement
+        }
     else if (x=='H')
         {
             halt();//STOP

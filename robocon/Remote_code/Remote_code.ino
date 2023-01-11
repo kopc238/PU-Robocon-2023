@@ -28,7 +28,7 @@ int mapY = 0;
 int RmapX = 0;
 int AmapY = 0;
 
-
+char x,check;
 
 
 void setup() {
@@ -61,42 +61,43 @@ void loop() {
     mapY = map(yPosition, 0, 1023, -255, 255);
     RmapX = map(RxPosition, 0, 1023, -255, 255); 
     AmapY = map(AyPosition, 0, 1023, -255, 255); 
-
-
-
+    
+   check=x;
+   send_data();
    
+   if (x!=check){
+      Serial.write(x);
+      Serial.println("");
+   }
+   
+ delay(100);
+}
+
+void send_data(){
+  
    //To Revolve robot in all clockwise and Anti-clockwise.
    if (AmapY < -20 && abs(RmapX) < 20)
         {
-          Serial.write('A');//Anti-CW-rotation
+          x='A';//Anti-CW-rotation
         }
    else if (AmapY > 20 && abs(RmapX) < 20)
         {
-          Serial.write('C');//CW-rotation
+          x='C';//CW-rotation
         }
 
 
-   
    //Diagonal motion 
    if (mapX>20 && mapY>20){
-    Serial.write('F');//forward
-    Serial.println(' ');
-    Serial.write('R');//Right
+    x='P';// P=F+R
    }
    if (mapX>20 && mapY < -20){
-    Serial.write('F');//forward
-    Serial.println(' ');
-    Serial.write('L');//Left
+    x='Q';// Q=F+L
    }
    if (mapX<-20 && mapY < -20){
-    Serial.write('B');//Backward
-    Serial.println(' ');
-    Serial.write('L');//Left
+    x='Z';// Z=B+L
    }
    if (mapX< -20 && mapY>20){
-    Serial.write('B');//Backward
-    Serial.println(' ');
-    Serial.write('R');//Right
+    x='M';// M=B+R
    }
 
    
@@ -104,27 +105,27 @@ void loop() {
    //Forward,Backward,Right & Left motion 
    if (mapX > 20 && abs(mapY)<20)
         {
-            Serial.write('F');//Forward
+            x='F';//Forward
         }
    else if (mapX < -20 && abs(mapY)<20)
         {   
-            Serial.write('B');//Backward
+            x='B';//Backward
         }
    else if (mapY > 20 && abs(mapX)<20)
         {
-            Serial.write('R');//Right
+            x='R';//Right
         }
     else if (mapY < -20 && abs(mapX)<20)
         {
-            Serial.write('L');//Left
+            x='L';//Left
         }
     else if ( abs(mapX)<20 && abs(mapY)<20 && abs(RmapX) < 20 && abs(AmapY)<20 )
             {
-               Serial.write('H');//Halt
+               x='H';//Halt
             }
-    
-    Serial.println(' ');
+     
 }
+
 
 
 
