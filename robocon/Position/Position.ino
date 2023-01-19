@@ -1,5 +1,5 @@
 //New mapping Program
-
+//for postion and oreintation
 
 int encoder_perimeter=150.72;//150.72=(pi*48) in mm
 
@@ -70,40 +70,39 @@ void setup() {
 }
 
 void loop(){ 
-  //Do stuff here
-
-  //For Encoder one and x axis
-  angular_displacement_x=map(encoderValue_x,0,2400,0,360);
-  x_rotations=angular_displacement_x/360;
   
-  //For Encoder two and y axis
-  angular_displacement_y=map(encoderValue_y,0,2400,0,360);
-  y_rotations=angular_displacement_y/360;
+  //for encoder one and relates to x- axis
+  int rev_x = encoderValue_x / 2400;
+  int parRev_x=encoderValue_x % 2400;
 
-  //Distance travelled
-  float x_displacement=x_rotations*encoder_perimeter;
-  float y_displacement=y_rotations*encoder_perimeter;
+  float CRev_x=rev_x*150.72;
+  float CparRev_x=(parRev_x*150.72)/2400;
 
-  //Current positions
-  x=x_displacement;
-  y=y_displacement;
+  float total_x = CRev_x + CparRev_x;
   
-  Serial.print("X Rotations: ");
-  Serial.print(x_rotations);
+  //for encoder two and relates to y- axis
+  int rev_y = encoderValue_y / 2400;
+  int parRev_y=encoderValue_y % 2400;
+
+  float CRev_y=rev_y*150.72;
+  float CparRev_y=(parRev_y*150.72)/2400;
+
+  float total_y = CRev_y + CparRev_y;
+
+  //Position
+  x=total_x;
+  y=total_y;
+
+  Serial.print(x);
   Serial.print("  ");
-  Serial.print("X Displacement: ");
-  Serial.print(x_displacement);
-  Serial.print("  ");
-   
-  Serial.print("Y Rotations: ");
-  Serial.println(y_rotations);
-  Serial.print("  ");
-  Serial.print("Y Displacement: ");
-  Serial.println(y_displacement);
-  //Serial.print("  ");
+  Serial.println(y);
+  
 
   
-  delay(1000); //just here to slow down the output, and show it will work  even during a delay
+  
+
+  
+  delay(200); //just here to slow down the output, and show it will work  even during a delay
 }
 
 
