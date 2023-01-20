@@ -1,7 +1,7 @@
 //Code for ER arduino mega
 //reciever end
 // with zigbee interfaced 
-
+//runs with constant speed 
 
 
 #include "CytronMotorDriver.h"
@@ -16,6 +16,8 @@ CytronMD BM4(PWM_DIR, 9, 8);
 
 //INPUT from Serial1 Monitor
 char x;
+
+const int speed=64;
 
 
 void setup()
@@ -35,47 +37,47 @@ void halt()
 
 void forward()
 {
-    BM1.setSpeed(64);
-    BM2.setSpeed(64);
+    BM1.setSpeed(speed);
+    BM2.setSpeed(speed);
     Serial1.print("Forward\n");       
 }
 
 void backward()
 {
-    BM1.setSpeed(-64);
-    BM2.setSpeed(-64);
+    BM1.setSpeed(-speed);
+    BM2.setSpeed(-speed);
     Serial1.print("Backward\n");       
 }
 
 void right()
 {
-    BM3.setSpeed(64);
-    BM4.setSpeed(-64);
+    BM3.setSpeed(speed);
+    BM4.setSpeed(-speed);
     Serial1.print("Right\n"); 
 }
 
 void left()
 {
-    BM3.setSpeed(-64);
-    BM4.setSpeed(64);
+    BM3.setSpeed(-speed);
+    BM4.setSpeed(speed);
     Serial1.print("Left\n");
 }
 
 void LeftRotate()
 {
-  BM1.setSpeed(64);
-  BM2.setSpeed(-64);
-  BM3.setSpeed(64);
-  BM4.setSpeed(64);
+  BM1.setSpeed(speed);
+  BM2.setSpeed(-speed);
+  BM3.setSpeed(speed);
+  BM4.setSpeed(speed);
   Serial1.print("LeftRotate\n");
 }
 
 void RightRotate()
 {
-  BM1.setSpeed(-64);
-  BM2.setSpeed(64);
-  BM3.setSpeed(-64);
-  BM4.setSpeed(-64);
+  BM1.setSpeed(-speed);
+  BM2.setSpeed(speed);
+  BM3.setSpeed(-speed);
+  BM4.setSpeed(-speed);
   Serial1.print("RightRotate \n");
 }
 
