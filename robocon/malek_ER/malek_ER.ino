@@ -1,4 +1,3 @@
-//Malek code
 
 #include "CytronMotorDriver.h"
 
